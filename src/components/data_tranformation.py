@@ -34,6 +34,21 @@ class Datatransformation:
       cat_pipeline=Pipeline(
         steps=[
           ("imputer",SimpleImputer(strategy=""))
+          ("one_hot_encoder",OneHotEncoder())
+          ("scaler",StandardScaler())
+        ]
+  
+      )
+      logging.info("Numerical columns standard scaling completed")
+      logging.info("categorical columns encoding completed")
+
+      preprocessor=ColumnTransformer(
+        [
+          ("num_pipeline",num_pipeline,numerical_columns)
+          ("cat_pipeline",cat_pipeline,categorical_columns)
         ]
       )
-    except:
+      return preprocessor
+
+    except Exception as e:
+      raise CustomException(e,sys)
